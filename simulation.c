@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:59:13 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/18 18:04:30 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/19 14:18:32 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ long get_time_ms(void)
     gettimeofday(&tv, NULL);
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
+
 void    init_philo(t_simulation *sim)
 {
     int i;

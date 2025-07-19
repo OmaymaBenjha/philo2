@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:04:12 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/18 22:29:37 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/19 14:41:18 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int check_entry(int ac, char **av)
 int main(int ac, char **av)
 {
     t_simulation    sim;
-    
+
     if (!check_entry(ac, av))
         return (0);
     ft_memset(&sim, 0, sizeof(sim));

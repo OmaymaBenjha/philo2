@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:22:14 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/18 22:06:46 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/19 17:44:16 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,31 @@
 
 static void locking_mechanism(t_philosopher *p)
 {
-    pthread_mutex_t *first;
-    pthread_mutex_t *second;
+    // pthread_mutex_t *first;
+    // pthread_mutex_t *second;
     
-    if (p->id % 2 == 0)
-    {
-        first = p->l_fork;
-        second = p->r_fork;
-    }
-    else
-    {
-        first = p->r_fork;
-        second = p->l_fork;
-    }
-    pthread_mutex_lock(first);
+    // if (p->id % 2 == 0)
+    // {
+    //     first = p->l_fork;
+    //     second = p->r_fork;
+    // }
+    // else
+    // {
+    //     first = p->r_fork;
+    //     second = p->l_fork;
+    // }
+    pthread_mutex_lock(p->l_fork);
     print_state(p, "has taken a fork");
-    pthread_mutex_lock(second);
+    pthread_mutex_lock(p->r_fork);
     print_state(p, "has taken a fork");
     print_state(p, "is eating");
     pthread_mutex_lock(&p->meal_mutex);
     p->last_meal_time = get_time_ms();
     p->meals_eaten++;
     pthread_mutex_unlock(&p->meal_mutex);
-    accurate_usleep(p->sim->time_to_eat);
-    pthread_mutex_unlock(second);
-    pthread_mutex_unlock(first);    
+    accurate_usleep(p->sim->time_to_eat, p);
+    pthread_mutex_unlock(p->r_fork);
+    pthread_mutex_unlock(p->l_fork);    
 }
 
 void    *routine(void *data)
@@ -49,17 +49,17 @@ void    *routine(void *data)
     if (p->sim->num_of_philo == 1)
 	{
 		print_state(p, "has taken a fork");
-		accurate_usleep(p->sim->time_to_die);
+		accurate_usleep(p->sim->time_to_die, p);
 		return (NULL);
 	}
-    if (p->id % 2 == 0 && p->sim->num_of_philo % 2 == 0)
-        accurate_usleep(1);
+    if (p->id % 2 == 0)
+        accurate_usleep(p->sim->time_to_eat, p);
     while (!stop_getter(p->sim))
     {
-        print_state(p, "is thinking");
         locking_mechanism(p);
         print_state(p, "is sleeping");
-        accurate_usleep(p->sim->time_to_sleep);
+        accurate_usleep(p->sim->time_to_sleep, p);
+        print_state(p, "is thinking");
     }
     return (NULL);
 }

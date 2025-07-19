@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:07:20 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 12:26:29 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/19 18:07:40 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ft_atoi(const char *str)
 			sign = -1;
 		i++;
 	}
-	if (!ft_isalpha(str))
+	if (!ft_isalpha(&str[i]))
 		return (0);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
@@ -64,13 +64,18 @@ int	ft_atoi(const char *str)
 	}
 	return ((int)(result * sign));
 }
-void	accurate_usleep(long time_ms)
+void	accurate_usleep(long time_ms, t_philosopher *p)
 {
 	long	start;
 
 	start = get_time_ms();
 	while (get_time_ms() - start < time_ms)
-		usleep(69);
+	{
+		if(stop_getter(p->sim))
+			break ;
+		usleep(60);
+	}
+		
 }
 void print_state(t_philosopher *p, const char *state)
 {

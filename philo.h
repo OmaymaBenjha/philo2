@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 19:55:11 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 12:33:55 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/19 17:42:24 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_philosopher
 typedef struct s_simulation
 {
     int             num_of_philo;
-    int             time_to_die;
+    long             time_to_die;
     int             time_to_eat;
     int             time_to_sleep;
     int             must_eat_count;
@@ -58,7 +58,7 @@ void    *routine(void *data);
 int     stop_getter(t_simulation *sim);
 void    stop_setter(t_simulation *sim);
 long    get_time_ms(void);
-void	accurate_usleep(long time_ms);
+void	accurate_usleep(long time_ms, t_philosopher *p);
 void    monitor_trigger(t_simulation *sim);
 
 //-----------------------tools
