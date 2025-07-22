@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 19:55:11 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 17:42:24 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/22 17:28:38 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <stdio.h>
-# include <limits.h>
+#include <limits.h>
+#include <string.h>
 
 struct s_simulation;
 
@@ -38,7 +39,7 @@ typedef struct s_philosopher
 typedef struct s_simulation
 {
     int             num_of_philo;
-    long             time_to_die;
+    long            time_to_die;
     int             time_to_eat;
     int             time_to_sleep;
     int             must_eat_count;

@@ -1,8 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-
+CFLAGS = -Wall -Wextra -Werror # -g3 -fsanitize=thread
 
 RM = rm -f 
 
@@ -19,10 +18,10 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) $(CFLAGS) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS )  -c $< -o $@
+	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)

@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:22:14 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 17:44:16 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/22 21:24:40 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void locking_mechanism(t_philosopher *p)
     print_state(p, "has taken a fork");
     pthread_mutex_lock(p->r_fork);
     print_state(p, "has taken a fork");
-    print_state(p, "is eating");
     pthread_mutex_lock(&p->meal_mutex);
+    print_state(p, "is eating");
     p->last_meal_time = get_time_ms();
     p->meals_eaten++;
     pthread_mutex_unlock(&p->meal_mutex);
@@ -53,10 +53,20 @@ void    *routine(void *data)
 		return (NULL);
 	}
     if (p->id % 2 == 0)
-        accurate_usleep(p->sim->time_to_eat, p);
+		accurate_usleep(p->sim->time_to_eat, p);
     while (!stop_getter(p->sim))
     {
         locking_mechanism(p);
+        if (p->sim->must_eat_count > 0)
+        {
+            pthread_mutex_lock(&p->meal_mutex);
+            if (p->meals_eaten >= p->sim->must_eat_count)
+            {
+                pthread_mutex_unlock(&p->meal_mutex);
+                break ;
+            }
+            pthread_mutex_unlock(&p->meal_mutex);
+        }
         print_state(p, "is sleeping");
         accurate_usleep(p->sim->time_to_sleep, p);
         print_state(p, "is thinking");

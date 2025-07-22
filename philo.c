@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:04:12 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 14:41:18 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/22 17:28:58 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,38 @@ static int check_entry(int ac, char **av)
     }
     return (1);
 }
-
+static void clean_up(t_simulation *sim)
+{
+    int i;
+    
+    i = 0;
+ 
+    while (i < sim->num_of_philo)
+    {
+        pthread_mutex_destroy(&sim->forks[i]);
+        i++;
+    }
+    pthread_mutex_destroy(&sim->stop_mutex);
+    pthread_mutex_destroy(&sim->output_mutex);
+    i = 0;
+    while (i < sim->num_of_philo)
+    {
+        pthread_mutex_destroy(&sim->philos[i].meal_mutex);  
+        i++;
+    }
+}
 int main(int ac, char **av)
 {
     t_simulation    sim;
 
     if (!check_entry(ac, av))
         return (0);
-    ft_memset(&sim, 0, sizeof(sim));
+    memset(&sim, 0, sizeof(sim));
     if (!init_simulation(&sim, ac, av))
         return(printf("Invalid Arguments!\n"), 1);
     init_philo(&sim);
     simulation_trigger(&sim);
     monitor_trigger(&sim);
+    clean_up(&sim);
     return (0);
 }

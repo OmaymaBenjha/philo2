@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:07:20 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 18:07:40 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/22 22:56:30 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	sign = 1;
 	result = 0;
-	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
-		i++;
+	// while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
+	// 	i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
@@ -59,6 +59,9 @@ int	ft_atoi(const char *str)
 		return (0);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
+		if ((result > INT_MAX / 10)
+			|| (result == INT_MAX / 10 && (str[i] - '0') > INT_MAX % 10))
+			return (-1);
 		result = result * 10 + (str[i] - '0');
 		i++;
 	}

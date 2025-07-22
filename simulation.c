@@ -6,7 +6,7 @@
 /*   By: oben-jha <oben-jha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:59:13 by oben-jha          #+#    #+#             */
-/*   Updated: 2025/07/19 14:18:32 by oben-jha         ###   ########.fr       */
+/*   Updated: 2025/07/22 20:32:09 by oben-jha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ void    simulation_trigger(t_simulation *sim)
     }
 }
 
-
-
+//27119 147 is sleeping 
+//27419 147 is thinking ======> 27418 147 died
 
