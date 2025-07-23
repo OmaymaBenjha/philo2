@@ -12,11 +12,31 @@
 
 #include "philo.h"
 
-int init_simulation(t_simulation *sim, int ac, char **av)
+static int init_forks(t_simulation *sim)
 {
     int i;
+    int j;
 
     i = 0;
+    j = 0;
+    while (i < sim->num_of_philo)
+    {
+        if(pthread_mutex_init(&sim->forks[i], NULL) != 0)
+        {
+            while (j < i)
+            {
+                pthread_mutex_destroy(&sim->forks[j]);
+                j++;
+            }
+            return (0);
+        }
+        i++;
+    }
+    return (1);
+}
+
+int init_simulation(t_simulation *sim, int ac, char **av)
+{
     sim->num_of_philo = ft_atoi(av[1]);
     sim->time_to_die = ft_atoi(av[2]);
     sim->time_to_eat = ft_atoi(av[3]);
@@ -30,15 +50,19 @@ int init_simulation(t_simulation *sim, int ac, char **av)
             sim->time_to_eat <= 0 || sim->time_to_sleep <= 0 ||
                 (ac == 6 && sim->must_eat_count <= 0))
                 return (0);
-    pthread_mutex_init(&sim->stop_mutex, NULL);
-    pthread_mutex_init(&sim->output_mutex, NULL);
-    while (i < sim->num_of_philo)
+    if (pthread_mutex_init(&sim->stop_mutex, NULL) != 0)
+        return (0);
+    if(pthread_mutex_init(&sim->output_mutex, NULL) != 0)
+        return (pthread_mutex_destroy(&sim->stop_mutex), 0);
+    if (!init_forks)
     {
-        pthread_mutex_init(&sim->forks[i], NULL);
-        i++;
+        pthread_mutex_destroy(&sim->stop_mutex);
+        pthread_mutex_destroy(&sim->output_mutex_mutex);
+        return (0);
     }
     return (1);
 }
+
 long get_time_ms(void)
 {
     struct timeval  tv;
@@ -47,9 +71,10 @@ long get_time_ms(void)
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void    init_philo(t_simulation *sim)
+int    init_philo(t_simulation *sim)
 {
     int i;
+    int j;
 
     i = 0;
     sim->start_time = get_time_ms();
@@ -59,11 +84,22 @@ void    init_philo(t_simulation *sim)
         sim->philos[i].sim = sim;
         sim->philos[i].l_fork = &sim->forks[i];
         sim->philos[i].r_fork = &sim->forks[(i + 1) % sim->num_of_philo]; 
-        pthread_mutex_init(&sim->philos[i].meal_mutex, NULL);          
+        if (pthread_mutex_init(&sim->philos[i].meal_mutex, NULL) != 0)
+        {
+            j = 0;
+            while (j < i)
+            {
+                pthread_mutex_destroy(&sim->philos[j].meal_mutex);
+                j++;
+            } 
+            return (0);
+        }          
         sim->philos[i].last_meal_time = sim->start_time;
         i++;
     }
+    return (1);
 }
+
 void    simulation_trigger(t_simulation *sim)
 {
     int i;

@@ -49,8 +49,9 @@ int main(int ac, char **av)
         return (0);
     memset(&sim, 0, sizeof(sim));
     if (!init_simulation(&sim, ac, av))
-        return(printf("Invalid Arguments!\n"), 1);
-    init_philo(&sim);
+        return (printf("Invalid Arguments!\n"), 1);
+    if (!init_philo(&sim)
+        return (1);
     simulation_trigger(&sim);
     monitor_trigger(&sim);
     clean_up(&sim);
